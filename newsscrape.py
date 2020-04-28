@@ -14,8 +14,9 @@ from newspaper import Article
 
 model = BertForSequenceClassification.from_pretrained('finbert-sentiment',cache_dir=None,  num_labels=3)
 from newspaper import Article
-article = Article('https://www.cnn.com/2020/04/25/economy/corporate-debt/index.html')
+article = Article('https://www.rttnews.com/3088904/instacart-to-hire-additional-250000-full-service-shoppers.aspx?type=corp')
 article.download()
+article.parse()
 article.text
 body = article.text
 prediction = predict(body, model)
