@@ -30,7 +30,7 @@ def main():
         model = load_model()
 
     st.subheader('Single Sentence classification')
-    tweet_input = st.text_input('Tweet:')
+    tweet_input = st.text_input('Paste Text Directly:')
 
     if tweet_input != '':
 
@@ -40,7 +40,7 @@ def main():
             blob = TextBlob(tweet_input)
             prediction['textblob_prediction'] = [sentence.sentiment.polarity for sentence in blob.sentences]
         st.write('Prediction:')
-        st.dataframe(prediction) 
+        st.table(prediction) 
 
     st.subheader('Insert Financial News Article URL')
 
@@ -57,17 +57,27 @@ def main():
                 article.download()
                 article.parse()
                 body = article.text
+                title = article.title
+                st.header(f'Article Title : {title}')
                 #Make prediction using BERT
                 prediction = predict(body, model)
+                #Mean sentiment
+                mean = prediction.sentiment_score.mean()
+                sentiment = 'negative' if mean < 0 else 'positive'
+                st.subheader(f'**Overall Sentiment: {sentiment}**\n')
+                st.subheader(f'**Mean score is = {mean}**')
                 #Make prediction using Textblob
                 blob = TextBlob(body)
                 prediction['textblob_prediction'] = [sentence.sentiment.polarity for sentence in blob.sentences]
-            
+                prediction.drop('logit', axis = 1, inplace = True)
+
             st.write('Prediction:')
             st.dataframe(prediction.style.\
                                     highlight_max(axis=0)\
                                     .background_gradient(cmap='RdYlGn'))
+                                    #.bar(subset=['sentiment_score'], align='mid', color=['#d65f5f', '#5fba7d']))
             try:
+
                 #most positive sentence
                 st.subheader('Most positive sentence is: \n')
                 best = prediction[prediction.sentiment_score == prediction.sentiment_score.max()].sentence.values[0]
