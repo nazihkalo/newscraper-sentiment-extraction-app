@@ -1,6 +1,6 @@
 # Financial News Scraper + Sentiment Analysis Application
 
-## An interactive application that takes either text or article URL as input and outputs sentiment of every sentence in the article. The sentiment is obtained using a fine-tuned BERT model on financial news articles. The performance of the model is compared (side-by-side) in the table with other out-of-thebox models (in this case textblob). 
+#### An interactive application that takes either text or article URL as input and outputs sentiment of every sentence in the article. The sentiment is obtained using a fine-tuned BERT model on financial news articles. The performance of the model is compared (side-by-side) in the table with other out-of-thebox models (in this case textblob). 
 
 
 ![demo](images/appdemo.gif)
