@@ -16,6 +16,7 @@ from matplotlib.colors import LinearSegmentedColormap
 
 colors = ["red", "white", "green"]
 cmap = LinearSegmentedColormap.from_list("mycmap", colors)
+pd.set_option('display.max_colwidth', 100)
 #@st.cache
 def load_model():
     model = BertForSequenceClassification.from_pretrained('finbert-sentiment', cache_dir=None,  num_labels=3)
@@ -45,13 +46,8 @@ def run_prediciton_url(url,  model):
             prediction.drop('logit', axis = 1, inplace = True)
 
         values = st.slider('Select Sentiment Score Range', -1., 1., (-1., 1.), step = 0.01)
-        st.write('Values:', values)
         prediction = prediction[(prediction['sentiment_score'] >= values[0]) & (prediction['sentiment_score'] <= values[1])]
-        st.write('Prediction:')
-        st.dataframe(prediction.style.\
-                                highlight_max(axis=0)\
-                                .background_gradient(cmap=cmap))#'RdYlGn'))
-                                #.bar(subset=['sentiment_score'], align='mid', color=['#d65f5f', '#5fba7d']))
+    
         
         try:
 
@@ -75,6 +71,12 @@ def run_prediciton_url(url,  model):
         plt.axhline(y=0, linestyle = '--', color = 'black')
         plt.ylabel('Sentence Score (-1 to 1)')
         st.pyplot()
+
+        st.subheader('Prediction for every sentence:')
+        st.table(prediction.style.\
+                                highlight_max(axis=0)\
+                                .background_gradient(cmap=cmap))#'RdYlGn'))
+                                #.bar(subset=['sentiment_score'], align='mid', color=['#d65f5f', '#5fba7d']))
 
     except Exception as e:
         st.write(e)
@@ -115,14 +117,14 @@ def main():
     # Get user input
     url = st.text_input('Enter News Article URL:', '')
         # As long as the query is valid (not empty)
-    urls = {
+    urls = { '':url,
         "Oil Markets":"https://www.marketwatch.com/story/us-oils-may-contract-skids-about-20-at-nadir-as-crudes-woes-continue-2020-04-19",
     "Apple": "https://finance.yahoo.com/news/apple-shares-slip-company-issues-210056567.html",
     "Airlines": "https://www.reuters.com/article/us-health-coronavirus-norwegianair/norwegian-air-gets-bondholder-deal-on-1-2-billion-debt-for-equity-swap-idUSKBN22F0LP",
     "Saudi Arabia":"https://www.reuters.com/article/health-coronavirus-saudi-finance/saudi-minister-urges-private-sector-to-ease-poor-nations-debt-burden-ft-idUSFWN2CJ14D"}
     
     url_type = st.sidebar.selectbox("Select Sample Article?",  list(urls.keys()), 0)
-    url = urls[url_type]
+    url_select = urls[url_type]
 
     if url != '':
         run_prediciton_url(url, model)
