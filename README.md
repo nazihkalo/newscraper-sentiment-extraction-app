@@ -2,7 +2,7 @@
 
 #### An interactive application that takes either text or article URL as input and outputs sentiment of every sentence in the article. The sentiment is obtained using a fine-tuned BERT model on financial news articles. The performance of the model is compared (side-by-side) in the table with other out-of-thebox models (in this case textblob). 
 
-# [TEST OUT THE APP <==](https://msca-capstone-ibm.appspot.com)
+# [TEST OUT THE APP <==](https://financial-sentiment-analyzer.ue.r.appspot.com)
 
 ![demo](images/appdemo.gif)
 
